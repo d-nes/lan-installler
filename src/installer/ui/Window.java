@@ -1,21 +1,17 @@
 package installer.ui;
 
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import java.awt.FlowLayout;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.JOptionPane;
 import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
+
+import installer.logic.injector.OfficialLauncherInjector;
+
 import java.awt.Font;
 import java.awt.event.ItemEvent;
 
@@ -56,7 +52,30 @@ public class Window extends JFrame {
             }
         });
         rdbtnTLauncher.setEnabled(false); // TODO delete when implemented
-
+        
+        btnInstall.addActionListener(e -> {
+            if (rdbtnOfficalLauncher.isSelected()) {
+            	btnInstall.setEnabled(false);
+                OfficialLauncherInjector injector = new OfficialLauncherInjector();
+                if(injector.injectProfile()) {
+                	if(true/*TODO file extraction*/) {
+                		JOptionPane.showMessageDialog(null, "Modpack installed successfully. Click OK to close the application.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        System.exit(0);
+                	}
+                	else {
+                		JOptionPane.showMessageDialog(null, "Modpack installation failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
+                        System.exit(0);
+                	}
+                }
+                else {
+                	JOptionPane.showMessageDialog(null, "Modpack installation failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
+                    System.exit(0);
+                }
+            } else if (rdbtnTLauncher.isSelected()) {
+            	btnInstall.setEnabled(true);
+                //TODO implement
+            }
+        });
         
         getContentPane().setLayout(null);
         getContentPane().add(txtChooseYourLauncher);
@@ -65,9 +84,9 @@ public class Window extends JFrame {
         getContentPane().add(btnInstall);
 
         setPreferredSize(new Dimension(360, 180));
-        pack(); // Adjusts the size of the window based on its components
-        setResizable(false); // Disallows resizing
+        pack();
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centers the window on the screen
+        setLocationRelativeTo(null);
     }
 }
