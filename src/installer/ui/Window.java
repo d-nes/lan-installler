@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.ButtonGroup;
 import javax.swing.SwingConstants;
 
+import installer.logic.FileExtractor;
 import installer.logic.injector.OfficialLauncherInjector;
 
 import java.awt.Font;
@@ -37,7 +38,6 @@ public class Window extends JFrame {
         group.add(rdbtnOfficalLauncher);
         rdbtnOfficalLauncher.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                // Enable the install button when selected
                 btnInstall.setEnabled(true);
             }
         });
@@ -47,7 +47,6 @@ public class Window extends JFrame {
         group.add(rdbtnTLauncher);
         rdbtnTLauncher.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                // Enable the install button when selected
                 btnInstall.setEnabled(true);
             }
         });
@@ -58,21 +57,22 @@ public class Window extends JFrame {
             	btnInstall.setEnabled(false);
                 OfficialLauncherInjector injector = new OfficialLauncherInjector();
                 if(injector.injectProfile()) {
-                	if(true/*TODO file extraction*/) {
+                	FileExtractor extractor = new FileExtractor();
+                	if(extractor.extractFiles()) {
                 		JOptionPane.showMessageDialog(null, "Modpack installed successfully. Click OK to close the application.", "Success", JOptionPane.INFORMATION_MESSAGE);
                         System.exit(0);
                 	}
                 	else {
-                		JOptionPane.showMessageDialog(null, "Modpack installation failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
+                		JOptionPane.showMessageDialog(null, "File exctraction failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
                         System.exit(0);
                 	}
                 }
                 else {
-                	JOptionPane.showMessageDialog(null, "Modpack installation failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
+                	JOptionPane.showMessageDialog(null, "Profile injection failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
                     System.exit(0);
                 }
             } else if (rdbtnTLauncher.isSelected()) {
-            	btnInstall.setEnabled(true);
+            	btnInstall.setEnabled(false);
                 //TODO implement
             }
         });

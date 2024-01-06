@@ -11,7 +11,7 @@ public class OfficialLauncherInjector {
             String userHome = System.getProperty("user.home");
 
             // Path to your JSON file in Minecraft directory
-            Path jsonFilePath = Paths.get(userHome, "AppData", "Roaming", ".minecraft", "launcher_profiles.json");
+            Path jsonFilePath = Paths.get(userHome, "AppData", "Roaming", ".minecraft", "launcher_profiles - Copy.json");
 
             // New profile details
             String newProfile = "\n\t\"lan2024\" : {\n" +
