@@ -11,7 +11,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.SwingConstants;
 
 import installer.logic.FileExtractor;
-import installer.logic.injector.OfficialLauncherInjector;
+import installer.logic.OfficialLauncherInjector;
 
 import java.awt.Font;
 import java.awt.event.ItemEvent;
@@ -50,7 +50,6 @@ public class Window extends JFrame {
                 btnInstall.setEnabled(true);
             }
         });
-        rdbtnTLauncher.setEnabled(false); // TODO delete when implemented
         
         btnInstall.addActionListener(e -> {
             if (rdbtnOfficalLauncher.isSelected()) {
@@ -63,7 +62,7 @@ public class Window extends JFrame {
                         System.exit(0);
                 	}
                 	else {
-                		JOptionPane.showMessageDialog(null, "File exctraction failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
+                		JOptionPane.showMessageDialog(null, "File extraction failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
                         System.exit(0);
                 	}
                 }
@@ -73,7 +72,15 @@ public class Window extends JFrame {
                 }
             } else if (rdbtnTLauncher.isSelected()) {
             	btnInstall.setEnabled(false);
-                //TODO implement
+            	FileExtractor extractor = new FileExtractor();
+            	if(extractor.extractFiles()) {
+            		JOptionPane.showMessageDialog(null, "Modpack installed successfully. Click OK to close the application.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    System.exit(0);
+            	}
+            	else {
+            		JOptionPane.showMessageDialog(null, "File extraction failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
+                    System.exit(0);
+            	}
             }
         });
         

@@ -1,4 +1,4 @@
-package installer.logic.injector;
+package installer.logic;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
