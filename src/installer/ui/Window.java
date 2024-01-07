@@ -17,6 +17,7 @@ import installer.logic.injector.OfficialLauncherInjector;
 import java.awt.Font;
 import java.awt.event.ItemEvent;
 
+@SuppressWarnings("serial")
 public class Window extends JFrame {
     private JLabel txtChooseYourLauncher;
 

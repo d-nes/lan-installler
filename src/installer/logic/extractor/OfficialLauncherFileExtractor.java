@@ -2,6 +2,9 @@ package installer.logic.extractor;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.Comparator;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class OfficialLauncherFileExtractor {
 
@@ -11,28 +14,58 @@ public class OfficialLauncherFileExtractor {
             String userHome = System.getProperty("user.home");
             Path minecraftFolderPath = Paths.get(userHome, "AppData", "Roaming", ".minecraft");
 
-            // Get the resources folder path within the JAR
-            Path resourcesFolderPath = Paths.get(OfficialLauncherFileExtractor.class.getResource("/resources").toURI());
+            // Specify the path to the zip file
+            PackageDownloader pkg = new PackageDownloader();
+            Path zipFilePath = pkg.downloadPackage();
 
-            // Walk through the resources folder and copy files to ".minecraft"
-            Files.walk(resourcesFolderPath)
+            // Create a temporary directory for extraction
+            Path tempDir = Files.createTempDirectory("extracted-files");
+
+            try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(zipFilePath))) {
+                ZipEntry zipEntry;
+
+                while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+                    // Calculate the destination path
+                    Path destination = tempDir.resolve(zipEntry.getName());
+
+                    // If it's a directory, create the corresponding directory in the temporary directory
+                    if (zipEntry.isDirectory()) {
+                        Files.createDirectories(destination);
+                    } else {
+                        // If it's a file, copy it to the temporary directory
+                        Files.copy(zipInputStream, destination, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                }
+            }
+
+            // Copy files from the temporary directory to ".minecraft"
+            Files.walk(tempDir)
                     .forEach(source -> {
                         try {
-                            // Get the relative path from resources folder
-                            Path relativePath = resourcesFolderPath.relativize(source);
+                            Path relativePath = tempDir.relativize(source);
                             Path destination = minecraftFolderPath.resolve(relativePath);
 
-                            // If it's a file, copy it to the destination
                             if (Files.isRegularFile(source)) {
                                 Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
                             } else if (Files.isDirectory(source)) {
-                                // If it's a directory, create the corresponding directory in ".minecraft"
                                 Files.createDirectories(destination);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     });
+
+            // Clean up: Delete the temporary directory
+            Files.walk(tempDir)
+                    .sorted(Comparator.reverseOrder())
+                    .forEach(path -> {
+                        try {
+                            Files.delete(path);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+            pkg.deletePackage(zipFilePath);
 
             return true; // Extraction successful
 

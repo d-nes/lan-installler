@@ -3,7 +3,10 @@ package installer.logic.extractor;
 import java.io.IOException;
 import java.nio.file.*;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class UnofficialLauncherFileExtractor {
 
@@ -13,8 +16,32 @@ public class UnofficialLauncherFileExtractor {
             String userHome = System.getProperty("user.home");
             Path minecraftFolderPath = Paths.get(userHome, "AppData", "Roaming", ".minecraft");
 
-            // Define the source folder in the JAR for mods
-            Path modsSourceFolderPath = Paths.get(UnofficialLauncherFileExtractor.class.getResource("/resources/lan2024/mods").toURI());
+            // Specify the path to the zip file
+            PackageDownloader pkg = new PackageDownloader();
+            Path zipFilePath = pkg.downloadPackage();
+
+            // Create a temporary directory for extraction
+            Path tempDir = Files.createTempDirectory("extracted-files");
+
+            try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(zipFilePath))) {
+                ZipEntry zipEntry;
+
+                while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+                    // Calculate the destination path
+                    Path destination = tempDir.resolve(zipEntry.getName());
+
+                    // If it's a directory, create the corresponding directory in the temporary directory
+                    if (zipEntry.isDirectory()) {
+                        Files.createDirectories(destination);
+                    } else {
+                        // If it's a file, copy it to the temporary directory
+                        Files.copy(zipInputStream, destination, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                }
+            }
+
+            // Define the source folder in the temporary directory for mods
+            Path modsSourceFolderPath = tempDir.resolve("lan2024/mods");
 
             // Define the destination folder within ".minecraft" for mods
             Path modsDestinationFolderPath = minecraftFolderPath.resolve("mods");
@@ -36,8 +63,8 @@ public class UnofficialLauncherFileExtractor {
             // Extract files from the mods source folder to the mods destination folder
             extractFolder(modsSourceFolderPath, modsDestinationFolderPath);
 
-            // Define the source folder in the JAR for versions
-            Path versionsSourceFolderPath = Paths.get(UnofficialLauncherFileExtractor.class.getResource("/resources/versions").toURI());
+            // Define the source folder in the temporary directory for versions
+            Path versionsSourceFolderPath = tempDir.resolve("versions");
 
             // Define the destination folder within ".minecraft" for versions
             Path versionsDestinationFolderPath = minecraftFolderPath.resolve("versions");
@@ -47,6 +74,18 @@ public class UnofficialLauncherFileExtractor {
 
             // Extract files from the versions source folder to the versions destination folder
             extractFolder(versionsSourceFolderPath, versionsDestinationFolderPath);
+
+            // Clean up: Delete the temporary directory
+            Files.walk(tempDir)
+                    .sorted(Comparator.reverseOrder())
+                    .forEach(path -> {
+                        try {
+                            Files.delete(path);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+            pkg.deletePackage(zipFilePath);
 
             return true; // Extraction successful
 
