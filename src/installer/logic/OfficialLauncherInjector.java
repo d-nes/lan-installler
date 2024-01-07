@@ -20,7 +20,7 @@ public class OfficialLauncherInjector {
                     "      \"icon\" : \"Lectern_Book\",\n" +
                     "      \"javaArgs\" : \"-Xmx4G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M\",\n" +
                     "      \"lastUsed\" : \"2024-01-06T18:25:25.942Z\",\n" +
-                    "      \"lastVersionId\" : \"lan2024\",\n" +
+                    "      \"lastVersionId\" : \"1.20.1-forge-47.2.0\",\n" +
                     "      \"name\" : \"LAN 2024\",\n" +
                     "      \"type\" : \"custom\"\n" +
                     "    },";
