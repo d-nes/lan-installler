@@ -7,7 +7,7 @@ import java.nio.file.*;
 
 public class PackageDownloader {
 
-    private static final String DOWNLOAD_URL = "https://www.dropbox.com/scl/fi/8jkseerw12i37xu1w4t4q/lan2024files.zip?rlkey=ceuif4pzc2zubkw4qkefzmau3&dl=1";
+    private static final String DOWNLOAD_URL = "https://www.dropbox.com/scl/fi/v70jgg70wc66ftdw90k0k/lan2022files.zip?rlkey=wytgjjdxixdu2y3stuext6k3r&dl=1";
 
     public Path downloadPackage() {
         try {
@@ -15,7 +15,7 @@ public class PackageDownloader {
             Path outputPath = Files.createTempDirectory("downloaded-packages");
 
             // Extract the file name from the URL
-            String fileName = "lan2024files.zip";
+            String fileName = "lan2022files.zip";
 
             // Calculate the destination path
             Path destination = outputPath.resolve(fileName);

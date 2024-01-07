@@ -44,14 +44,14 @@ public class OfficialLauncherInjector implements Runnable {
             createBackup(jsonFilePath);
 
             // New profile details
-            String newProfile = "\n\t\"lan2024\" : {\n" +
-                    "      \"created\" : \"2023-12-19T22:47:00.622Z\",\n" +
-                    "      \"gameDir\" : \"" + userHome.replace("\\", "\\\\") + "\\\\AppData\\\\Roaming\\\\.minecraft\\\\lan2024\",\n" +
+            String newProfile = "\n\t\"lan2022\" : {\n" +
+                    "      \"created\" : \"2021-12-19T22:47:00.622Z\",\n" +
+                    "      \"gameDir\" : \"" + userHome.replace("\\", "\\\\") + "\\\\AppData\\\\Roaming\\\\.minecraft\\\\lan2022\",\n" +
                     "      \"icon\" : \"Lectern_Book\",\n" +
                     "      \"javaArgs\" : \"-Xmx4G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M\",\n" +
-                    "      \"lastUsed\" : \"2024-01-06T18:25:25.942Z\",\n" +
-                    "      \"lastVersionId\" : \"lan2024\",\n" +
-                    "      \"name\" : \"LAN 2024\",\n" +
+                    "      \"lastUsed\" : \"2022-01-06T18:25:25.942Z\",\n" +
+                    "      \"lastVersionId\" : \"1.16.5-forge-36.2.23\",\n" +
+                    "      \"name\" : \"LAN 2022\",\n" +
                     "      \"type\" : \"custom\"\n" +
                     "    },";
 

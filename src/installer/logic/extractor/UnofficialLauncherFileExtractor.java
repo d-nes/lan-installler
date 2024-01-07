@@ -54,7 +54,7 @@ public class UnofficialLauncherFileExtractor implements Runnable {
             }
 
             // Define the source folder in the temporary directory for mods
-            Path modsSourceFolderPath = tempDir.resolve("lan2024/mods");
+            Path modsSourceFolderPath = tempDir.resolve("lan2022/mods");
 
             // Define the destination folder within ".minecraft" for mods
             Path modsDestinationFolderPath = minecraftFolderPath.resolve("mods");

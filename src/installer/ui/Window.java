@@ -20,7 +20,7 @@ public class Window extends JFrame {
     private JLabel txtChooseYourLauncher;
 
     public Window() {
-    	this.setTitle("LAN Modpack Installer 2024");
+    	this.setTitle("LAN Modpack Installer 2022");
     	
         txtChooseYourLauncher = new JLabel("Select your launcher of choice:");
         txtChooseYourLauncher.setHorizontalAlignment(SwingConstants.CENTER);
