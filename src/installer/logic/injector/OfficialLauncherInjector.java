@@ -4,10 +4,35 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 
-public class OfficialLauncherInjector {
-    private static final String BACKUP_FILE_SUFFIX = ".bak";
+import javax.swing.JOptionPane;
 
-    public boolean injectProfile() {
+import installer.logic.extractor.OfficialLauncherFileExtractor;
+
+public class OfficialLauncherInjector implements Runnable {
+    private static final String BACKUP_FILE_SUFFIX = ".bak";
+    
+	@Override
+	public void run() {
+		if(injectProfile()) {
+        	OfficialLauncherFileExtractor extractor = new OfficialLauncherFileExtractor();
+        	if(extractor.extractFiles()) {
+        		JOptionPane.showMessageDialog(null, "Modpack installed successfully. Click OK to close the application.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                System.exit(0);
+        	}
+        	else {
+        		restoreOriginal();
+        		JOptionPane.showMessageDialog(null, "File extraction failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
+                System.exit(0);
+        	}
+        }
+        else {
+        	restoreOriginal();
+        	JOptionPane.showMessageDialog(null, "Profile injection failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            System.exit(0);
+        }
+	}
+
+    private boolean injectProfile() {
         try {
             // Get the current user's home directory
             String userHome = System.getProperty("user.home");

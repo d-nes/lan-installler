@@ -8,8 +8,21 @@ import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class UnofficialLauncherFileExtractor {
+import javax.swing.JOptionPane;
 
+public class UnofficialLauncherFileExtractor implements Runnable {
+
+	@Override
+	public void run() {
+    	if(extractFiles()) {
+    		JOptionPane.showMessageDialog(null, "Modpack installed successfully. Click OK to close the application.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            System.exit(0);
+    	}
+    	else {
+    		JOptionPane.showMessageDialog(null, "File extraction failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
+            System.exit(0);
+    	}
+	}
     public boolean extractFiles() {
         try {
             // Get the ".minecraft" folder path
