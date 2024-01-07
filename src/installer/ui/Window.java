@@ -50,6 +50,7 @@ public class Window extends JFrame {
                 btnInstall.setEnabled(true);
             }
         });
+        rdbtnTLauncher.setEnabled(false);
         
         btnInstall.addActionListener(e -> {
             if (rdbtnOfficalLauncher.isSelected()) {
