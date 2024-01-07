@@ -10,8 +10,9 @@ import javax.swing.JOptionPane;
 import javax.swing.ButtonGroup;
 import javax.swing.SwingConstants;
 
-import installer.logic.FileExtractor;
-import installer.logic.OfficialLauncherInjector;
+import installer.logic.extractor.OfficialLauncherFileExtractor;
+import installer.logic.extractor.UnofficialLauncherFileExtractor;
+import installer.logic.injector.OfficialLauncherInjector;
 
 import java.awt.Font;
 import java.awt.event.ItemEvent;
@@ -42,7 +43,7 @@ public class Window extends JFrame {
             }
         });
 
-        JRadioButton rdbtnTLauncher = new JRadioButton("TLauncher");
+        JRadioButton rdbtnTLauncher = new JRadioButton("TLauncher (universal)");
         rdbtnTLauncher.setBounds(72, 67, 200, 23);
         group.add(rdbtnTLauncher);
         rdbtnTLauncher.addItemListener(e -> {
@@ -50,30 +51,32 @@ public class Window extends JFrame {
                 btnInstall.setEnabled(true);
             }
         });
-        rdbtnTLauncher.setEnabled(false);
+        //rdbtnTLauncher.setEnabled(false);
         
         btnInstall.addActionListener(e -> {
             if (rdbtnOfficalLauncher.isSelected()) {
             	btnInstall.setEnabled(false);
                 OfficialLauncherInjector injector = new OfficialLauncherInjector();
                 if(injector.injectProfile()) {
-                	FileExtractor extractor = new FileExtractor();
+                	OfficialLauncherFileExtractor extractor = new OfficialLauncherFileExtractor();
                 	if(extractor.extractFiles()) {
                 		JOptionPane.showMessageDialog(null, "Modpack installed successfully. Click OK to close the application.", "Success", JOptionPane.INFORMATION_MESSAGE);
                         System.exit(0);
                 	}
                 	else {
+                		injector.restoreOriginal();
                 		JOptionPane.showMessageDialog(null, "File extraction failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
                         System.exit(0);
                 	}
                 }
                 else {
+                	injector.restoreOriginal();
                 	JOptionPane.showMessageDialog(null, "Profile injection failed. Click OK to close the application.", "Error", JOptionPane.INFORMATION_MESSAGE);
                     System.exit(0);
                 }
             } else if (rdbtnTLauncher.isSelected()) {
             	btnInstall.setEnabled(false);
-            	FileExtractor extractor = new FileExtractor();
+            	UnofficialLauncherFileExtractor extractor = new UnofficialLauncherFileExtractor();
             	if(extractor.extractFiles()) {
             		JOptionPane.showMessageDialog(null, "Modpack installed successfully. Click OK to close the application.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     System.exit(0);

@@ -1,9 +1,9 @@
-package installer.logic;
+package installer.logic.extractor;
 
 import java.io.IOException;
 import java.nio.file.*;
 
-public class FileExtractor {
+public class OfficialLauncherFileExtractor {
 
     public boolean extractFiles() {
         try {
@@ -12,7 +12,7 @@ public class FileExtractor {
             Path minecraftFolderPath = Paths.get(userHome, "AppData", "Roaming", ".minecraft");
 
             // Get the resources folder path within the JAR
-            Path resourcesFolderPath = Paths.get(FileExtractor.class.getResource("/resources").toURI());
+            Path resourcesFolderPath = Paths.get(OfficialLauncherFileExtractor.class.getResource("/resources").toURI());
 
             // Walk through the resources folder and copy files to ".minecraft"
             Files.walk(resourcesFolderPath)
